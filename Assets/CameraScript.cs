@@ -1,20 +1,41 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CameraController : MonoBehaviour
 {
-public GameObject Player;
-private Vector3 offset;    
-void Start()
+    private Vector3 offset;
+    public float speed = 5f;
+    public float BoostSpeed = 10f;
+    public float TimeBoost = 0.5f;
+
+    private float CurrentSpeed;
+    private bool isBoosting = false;
+
+    private void Start()
     {
-        offset = transform.position - Player.transform.position;
+        CurrentSpeed = speed;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        transform.position = Player.transform.position + offset;
+        // Utilisation de CurrentSpeed au lieu de speed pour prendre en compte le boost
+        transform.position += Vector3.forward * CurrentSpeed * Time.deltaTime;
     }
-    void LateUpdate()
+
+    public void BoostCamera()
     {
+        if (!isBoosting)
+        {
+            StartCoroutine(BoostCoroutine());
+        }
+    }
+
+    private System.Collections.IEnumerator BoostCoroutine()
+    {
+        isBoosting = true;
+        CurrentSpeed = BoostSpeed; // Active le boost
+        yield return new WaitForSeconds(TimeBoost);
+        CurrentSpeed = speed; // Remet la vitesse normale
+        isBoosting = false;
     }
 }
