@@ -1,17 +1,17 @@
 using UnityEngine;
-
+using TMPro;
 public class PlayerController : MonoBehaviour
 {
-    public float moveDistance = 1f; // Distance de déplacement
-    public float moveSpeed = 5f; // Vitesse de déplacement
+    [SerializeField] private float moveDistance = 1f; // Distance de déplacement
+    [SerializeField] private float moveSpeed = 5f; // Vitesse de déplacement
 
     private Vector3 targetPosition;
     private bool isMoving = false;
+    private int count;
 
-    void Start()
-    {
-        targetPosition = transform.position;
-    }
+    [SerializeField] private GameObject winText;
+    [SerializeField] private TextMeshProUGUI contText;
+
 
     void Update()
     {
@@ -41,5 +41,29 @@ public class PlayerController : MonoBehaviour
     {
         targetPosition += direction * moveDistance;
         isMoving = true;
+    }
+    
+    //Modif Saverio pour le score 
+    
+    void OnTriggerEnter(Collider other)
+    {
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            count=count+1;
+            SetCountText();
+        }
+    }
+    void SetCountText()
+    {
+        contText.text = "Score : "+ Input.GetKeyDown(KeyCode.UpArrow);
+        
+    }
+    void Start()
+    {
+        targetPosition = transform.position;
+        count = 0;
+        SetCountText();
+        winText.SetActive(false);
+
     }
 }
