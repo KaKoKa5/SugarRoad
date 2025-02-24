@@ -8,10 +8,31 @@ public class PlayerController : MonoBehaviour
     private Vector3 targetPosition;
     private bool isMoving = false;
     private int count;
-
+    private int HighScore;
+    private float lastPositionZ;
     [SerializeField] private GameObject winText;
     [SerializeField] private TextMeshProUGUI contText;
 
+    //Modif Saverio pour le score 
+    
+  
+
+    void SetCountText()
+    {
+        contText.text = "Score : "+ count.ToString();
+
+        winText
+        
+    }
+    void Start()
+    {
+        targetPosition = transform.position;
+        lastPositionZ = transform.position.z;
+        count = 0;
+        SetCountText();
+        winText.SetActive(false);
+
+    }
 
     void Update()
     {
@@ -26,6 +47,21 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
                 Move(Vector3.right);
         }
+    {
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            float currentPositionZ = transform.position.z;
+            if (currentPositionZ>lastPositionZ)
+            {
+                count++;
+                SetCountText();
+            }
+            lastPositionZ = currentPositionZ;
+        }
+
+        
+        
+    }
 
         // Déplacement fluide du joueur vers la position cible
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
@@ -41,29 +77,5 @@ public class PlayerController : MonoBehaviour
     {
         targetPosition += direction * moveDistance;
         isMoving = true;
-    }
-    
-    //Modif Saverio pour le score 
-    
-    void OnTriggerEnter(Collider other)
-    {
-        if (Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            count=count+1;
-            SetCountText();
-        }
-    }
-    void SetCountText()
-    {
-        contText.text = "Score : "+ Input.GetKeyDown(KeyCode.UpArrow);
-        
-    }
-    void Start()
-    {
-        targetPosition = transform.position;
-        count = 0;
-        SetCountText();
-        winText.SetActive(false);
-
     }
 }
