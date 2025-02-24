@@ -1,19 +1,23 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;  // Pour recharger la scène
-
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class EndGameTrigger : MonoBehaviour
 {
-    public GameObject player;  // Référence au joueur
+    [SerializeField] private GameObject player;  // Référence au joueur
+     [SerializeField] private GameObject restartText;
     private Vector3 offset;
-    public Transform cameraTransform; // Assigner la caméra dans l'Inspector
-     private bool gameOver = false;
-     public float Reload;
-
+    
+    [SerializeField] private Transform cameraTransform; // Assigner la caméra dans l'Inspector
+     private bool dead = false;
+   
+    [SerializeField] private float Reload;
+    [SerializeField] private GameManager gameManager; 
 
  private void Start()
     {
         offset = transform.position - cameraTransform.position;
+        restartText.SetActive(false);
     }
 
     private void Update()
@@ -22,27 +26,28 @@ public class EndGameTrigger : MonoBehaviour
     }
       private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && !gameOver)
+        if (other.CompareTag("Player") && !dead)
         {
-            Debug.Log("Fin de Partie : Trigger touché !");
+            
+            restartText.SetActive(true); 
+            Time.timeScale = 0f;
+        
             EndGame();
         }
     }
 
     void EndGame()
     {
-        gameOver = true;
-        // Afficher un message de fin de partie (facultatif)
-        // Par exemple, tu peux activer une UI de Game Over ici
-
-        // Recharger la scène après 2 secondes (par exemple)
-        Invoke("ReloadScene", Reload);
+        dead = true;
+        Time.timeScale = 1f;
+         
     }
 
     void ReloadScene()
     {
-        // Recharge la scène actuelle (redémarre le jeu)
+      
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        
     }
 }
 
