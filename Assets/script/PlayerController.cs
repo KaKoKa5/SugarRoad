@@ -8,10 +8,12 @@ public class PlayerController : MonoBehaviour
     private Vector3 targetPosition;
     private bool isMoving = false;
     private int count;
-    private int HighScore;
+    private int record;
     private float lastPositionZ;
     [SerializeField] private GameObject winText;
     [SerializeField] private TextMeshProUGUI contText;
+    [SerializeField] private TextMeshProUGUI RecordText;
+
 
     //Modif Saverio pour le score 
     
@@ -21,7 +23,14 @@ public class PlayerController : MonoBehaviour
     {
         contText.text = "Score : "+ count.ToString();
 
-        winText
+       if (count > record)
+        {
+            record = count;
+            PlayerPrefs.SetInt("HighScore", record); // Sauvegarde du record
+            PlayerPrefs.Save(); // Assure que les données sont écrites sur le disque
+        }
+
+        RecordText.text = "Record : " + record;
         
     }
     void Start()
@@ -29,6 +38,9 @@ public class PlayerController : MonoBehaviour
         targetPosition = transform.position;
         lastPositionZ = transform.position.z;
         count = 0;
+
+        record = PlayerPrefs.GetInt("HighScore", 0);
+        
         SetCountText();
         winText.SetActive(false);
 
