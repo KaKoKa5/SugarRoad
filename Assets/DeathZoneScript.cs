@@ -39,7 +39,7 @@ public class EndGameTrigger : MonoBehaviour
     void EndGame()
     {
         dead = true;
-        Time.timeScale = 1f;
+        Time.timeScale = 0f;
          
     }
 

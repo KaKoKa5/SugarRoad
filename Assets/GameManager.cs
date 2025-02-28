@@ -4,6 +4,8 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private GameObject gameOverUI;
+    
+    [SerializeField] private GameObject winOverUI;
     void Start()
     {
         
@@ -14,7 +16,10 @@ public class GameManager : MonoBehaviour
     {
         
     }
-
+    public void win()
+    {
+        winOverUI.SetActive(true);
+    }
     public void gameOver()
     {
         gameOverUI.SetActive(true);
@@ -24,4 +29,5 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+   
 }
